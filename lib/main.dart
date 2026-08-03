@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
 void main() {
   runApp(const MyApp());
 }
 
+Future<String> getAppVersion() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  String version = packageInfo.version;      // Returns '1.0.0'
+  String buildNumber = packageInfo.buildNumber; // Returns '1'
+  
+  return '$version+$buildNumber';
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const buildVersion =
-    String.fromEnvironment('BUILD_NUMBER', defaultValue: '0');
+
     return MaterialApp(
-      title: 'Flutter Demo Ver $buildVersion',
+      title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -32,7 +40,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo  Ver 4 Home Page'),
+      home: const MyHomePage(title: ''),
     );
   }
 }
@@ -57,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
+  String title = '';
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -68,7 +76,17 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final ver = await getAppVersion();
+      setState(() {
+        title = ver;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -85,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it

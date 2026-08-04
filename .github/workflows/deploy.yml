@@ -47,21 +47,36 @@ jobs:
         run: |
           git-cliff -o CHANGELOG.md
 
-      - name: Commit CHANGELOG
+      # - name: Commit CHANGELOG
+      #   run: |
+      #     git config user.name github-actions
+      #     git config user.email github-actions@github.com
+
+      #     git add CHANGELOG.md
+
+      #     git commit -m "docs: update changelog [skip ci]" || true
+
+      #     git push origin HEAD:${{ github.ref_name }}
+
+      # - uses: softprops/action-gh-release@v2
+      #   with:
+      #     body_path: CHANGELOG.md
+
+      - name: Bump Version
+        run: |
+          chmod +x scripts/bump_version.sh
+          ./scripts/bump_version.sh
+
+      - name: Commit Version
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
 
-          git add CHANGELOG.md
+          git add pubspec.yaml
 
-          git commit -m "docs: update changelog [skip ci]" || true
+          git commit -m "Auto bump build number [skip ci]" || true
 
-          git push origin HEAD:${{ github.ref_name }}
-
-      - uses: softprops/action-gh-release@v2
-        with:
-          body_path: CHANGELOG.md
-
+          git push
       - uses: subosito/flutter-action@v2
         with:
           channel: stable

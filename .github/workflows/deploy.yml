@@ -33,8 +33,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
 
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
 
       - name: Install git-cliff
         run: |
@@ -53,7 +56,7 @@ jobs:
 
           git commit -m "docs: update changelog [skip ci]" || true
 
-          git push
+          git push origin HEAD:${{ github.ref_name }}
 
       - uses: softprops/action-gh-release@v2
         with:

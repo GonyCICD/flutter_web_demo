@@ -2,4 +2,4 @@
 
 ### 🚀 Features
 
-- Add changelog
+- Run parralel

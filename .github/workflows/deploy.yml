@@ -57,6 +57,12 @@ jobs:
       - name: Build Web
         run: flutter build web --release --base-href "/${{ github.event.repository.name }}/" --dart-define=BUILD_NUMBER=${{ github.run_number }}
 
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            build/web/**
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

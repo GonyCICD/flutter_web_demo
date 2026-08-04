@@ -40,13 +40,13 @@ jobs:
         #   ref: ${{ github.ref_name }}
         #   fetch-depth: 0
 
-      # - name: Install git-cliff
-      #   run: |
-      #     cargo install git-cliff
+      - name: Install git-cliff
+        run: |
+          cargo install git-cliff
 
-      # - name: Generate CHANGELOG
-      #   run: |
-      #     git-cliff -o CHANGELOG.md
+      - name: Generate CHANGELOG
+        run: |
+          git-cliff -o CHANGELOG.md
 
       - name: Commit CHANGELOG
         run: |

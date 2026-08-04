@@ -1,9 +1,10 @@
 name: Deploy Flutter Web to GitHub Pages
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 # on:
 
@@ -14,10 +15,10 @@ name: Deploy Flutter Web to GitHub Pages
 #     types:
 #       - completed
 
-on:
-  push:
-    tags:
-      - 'v*'
+# on:
+#   push:
+#     tags:
+#       - 'v*'
 
 permissions:
   contents: write
@@ -35,48 +36,33 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}
-          fetch-depth: 0
+        # with:
+        #   ref: ${{ github.ref_name }}
+        #   fetch-depth: 0
 
-      - name: Install git-cliff
-        run: |
-          cargo install git-cliff
-
-      - name: Generate CHANGELOG
-        run: |
-          git-cliff -o CHANGELOG.md
-
-      # - name: Commit CHANGELOG
+      # - name: Install git-cliff
       #   run: |
-      #     git config user.name github-actions
-      #     git config user.email github-actions@github.com
+      #     cargo install git-cliff
 
-      #     git add CHANGELOG.md
+      # - name: Generate CHANGELOG
+      #   run: |
+      #     git-cliff -o CHANGELOG.md
 
-      #     git commit -m "docs: update changelog [skip ci]" || true
-
-      #     git push origin HEAD:${{ github.ref_name }}
-
-      # - uses: softprops/action-gh-release@v2
-      #   with:
-      #     body_path: CHANGELOG.md
-
-      - name: Bump Version
-        run: |
-          chmod +x scripts/bump_version.sh
-          ./scripts/bump_version.sh
-
-      - name: Commit Version
+      - name: Commit CHANGELOG
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
 
-          git add pubspec.yaml
+          git add CHANGELOG.md
 
-          git commit -m "Auto bump build number [skip ci]" || true
+          git commit -m "docs: update changelog [skip ci]" || true
 
           git push
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: CHANGELOG.md
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable

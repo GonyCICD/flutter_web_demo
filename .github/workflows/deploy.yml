@@ -29,6 +29,9 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  GIT_CLIFF_VERSION: "2.10.0"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,11 +42,24 @@ jobs:
         # with:
         #   ref: ${{ github.ref_name }}
         #   fetch-depth: 0
+      
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-git-cliff-${{ env.GIT_CLIFF_VERSION }}
 
-      - name: Install git-cliff
+      # - name: Install git-cliff
+      #   run: |
+      #     cargo install git-cliff
+      - name: Install git-cliff with check cache
         run: |
-          cargo install git-cliff
-
+          if ! command -v git-cliff >/dev/null; then
+            cargo install git-cliff \
+              --version $GIT_CLIFF_VERSION
+          fi
       - name: Generate CHANGELOG
         run: |
           git-cliff -o CHANGELOG.md

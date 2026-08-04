@@ -18,7 +18,7 @@ on:
   push:
     tags:
       - 'v*'
-         
+
 permissions:
   contents: write
   pages: write
@@ -76,7 +76,7 @@ jobs:
   deploy:
     needs: build
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
     runs-on: ubuntu-latest
 

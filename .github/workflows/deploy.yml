@@ -55,25 +55,21 @@ jobs:
       #   run: |
       #     cargo install git-cliff
 
-      - name: Cache git-cliff
+      - name: Cache Cargo
         uses: actions/cache@v4
         with:
-          path: ~/.local/bin/git-cliff
-          key: ${{ runner.os }}-git-cliff-2.10.0
-
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git-cliff-v2
+      
       - name: Install git-cliff
         run: |
-          mkdir -p ~/.local/bin
-
-          if [ ! -f ~/.local/bin/git-cliff ]; then
-            curl -L https://github.com/orhun/git-cliff/releases/download/v2.10.0/git-cliff-2.10.0-x86_64-unknown-linux-gnu.tar.gz \
-              | tar xz
-
-            mv git-cliff ~/.local/bin/
+          if ! command -v git-cliff >/dev/null; then
+            cargo install git-cliff
           fi
-
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-      
+          
       - name: Generate CHANGELOG
         run: |
           git-cliff -o CHANGELOG.md

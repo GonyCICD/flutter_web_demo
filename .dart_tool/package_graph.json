@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "flutter_web_demo",
-      "version": "1.0.0+3",
+      "version": "1.0.0+4",
       "dependencies": [
         "cupertino_icons",
         "flutter",

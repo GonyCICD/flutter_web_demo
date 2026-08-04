@@ -5,15 +5,20 @@ name: Deploy Flutter Web to GitHub Pages
 #     branches:
 #       - main
 
+# on:
+
+#   workflow_run:
+
+#     workflows: ["Flutter CI"]
+
+#     types:
+#       - completed
+
 on:
-
-  workflow_run:
-
-    workflows: ["Flutter CI"]
-
-    types:
-      - completed
-      
+  push:
+    tags:
+      - 'v*'
+         
 permissions:
   contents: write
   pages: write
